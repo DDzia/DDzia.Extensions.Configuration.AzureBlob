@@ -1,4 +1,4 @@
-# DDzia.Microsoft.Extensions.Configuration.AzureBlob
+# DDzia.Extensions.Configuration.AzureBlob
 
 [![Build Status](https://dev.azure.com/ddziaddzia/GH/_apis/build/status/DDzia.Extensions.Configuration.AzureBlob?branchName=master)](https://dev.azure.com/ddziaddzia/GH/_build/latest?definitionId=132&branchName=master)
 [![Nuget](https://img.shields.io/nuget/v/DDzia.Extensions.Configuration.AzureBlob?style=flat-square)](https://www.nuget.org/packages/DDzia.Extensions.Configuration.AzureBlob/)
@@ -16,7 +16,7 @@ With this extension, multiple instances can share the application settings saved
 
 Install package:
 ```
-dotnet add package DDzia.Microsoft.Extensions.Configuration.AzureBlob
+dotnet add package DDzia.Extensions.Configuration.AzureBlob
 ```
 
 Code sample:
