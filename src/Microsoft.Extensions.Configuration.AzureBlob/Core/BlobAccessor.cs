@@ -34,8 +34,17 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
             var blobClient = await this.blobClientFactory(ct)
                 .ConfigureAwait(false);
 
-            var properties = await blobClient.GetPropertiesAsync(new BlobRequestConditions(), ct)
-                .ConfigureAwait(false);
+            Response<BlobProperties> properties;
+            try
+            {
+                properties = await blobClient.GetPropertiesAsync(new BlobRequestConditions(), ct)
+                    .ConfigureAwait(false);
+            }
+            catch (RequestFailedException e) when (e.Status == 404 || e.ErrorCode == "BlobNotFound")
+            {
+                return (default, false);
+            }
+
             if (properties.Value.ETag == eTag)
             {
                 return (properties.Value.ETag, false);
