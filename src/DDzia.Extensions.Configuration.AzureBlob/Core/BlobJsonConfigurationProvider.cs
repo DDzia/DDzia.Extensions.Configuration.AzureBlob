@@ -2,12 +2,10 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Azure;
-
 using Microsoft.Extensions.Configuration.Json;
 
-namespace Microsoft.Extensions.Configuration.AzureBlob.Core
+namespace DDzia.Extensions.Configuration.AzureBlob.Core
 {
     public class BlobJsonConfigurationProvider : JsonConfigurationProvider
     {

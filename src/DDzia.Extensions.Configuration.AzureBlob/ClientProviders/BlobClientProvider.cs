@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 
-namespace Microsoft.Extensions.Configuration.AzureBlob.ClientProviders
+namespace DDzia.Extensions.Configuration.AzureBlob.ClientProviders
 {
     public abstract class BlobClientProvider
     {

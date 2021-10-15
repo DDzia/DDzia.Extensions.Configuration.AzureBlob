@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
+using DDzia.Extensions.Configuration.AzureBlob.ClientProviders;
 
-using Microsoft.Extensions.Configuration.AzureBlob.ClientProviders;
-
-namespace Microsoft.Extensions.Configuration.AzureBlob
+namespace DDzia.Extensions.Configuration.AzureBlob
 {
     public class BlobJsonConfigurationOption
     {

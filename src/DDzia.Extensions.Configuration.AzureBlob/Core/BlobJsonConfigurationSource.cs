@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 
-namespace Microsoft.Extensions.Configuration.AzureBlob.Core
+namespace DDzia.Extensions.Configuration.AzureBlob.Core
 {
     public class BlobJsonConfigurationSource : JsonConfigurationSource
     {
