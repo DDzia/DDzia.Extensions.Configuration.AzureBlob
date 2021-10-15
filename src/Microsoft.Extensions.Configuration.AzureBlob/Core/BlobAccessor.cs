@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
             this.fetchCancellationTokenFactory = fetchCancellationTokenFactory ?? throw new ArgumentNullException(nameof(fetchCancellationTokenFactory));
         }
 
-        public async Task<(ETag, bool)> RetrieveIfUpdated(MemoryStream ms, ETag eTag)
+        public async Task<(ETag, bool updated, bool exists)> RetrieveIfUpdated(MemoryStream ms, ETag eTag)
         {
             if (ms == null)
             {
@@ -42,17 +42,17 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
             }
             catch (RequestFailedException e) when (e.Status == 404 || e.ErrorCode == "BlobNotFound")
             {
-                return (default, false);
+                return (default, eTag != default, false);
             }
 
             if (properties.Value.ETag == eTag)
             {
-                return (properties.Value.ETag, false);
+                return (properties.Value.ETag, false, true);
             }
 
             await blobClient.DownloadToAsync(ms, ct)
                 .ConfigureAwait(false);
-            return (properties.Value.ETag, true);
+            return (properties.Value.ETag, true, true);
         }
     }
 }
