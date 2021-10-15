@@ -12,6 +12,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>config, azure, storage, blobs, blob, remoteconfig</PackageTags>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <Version>1.0.1</Version>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />

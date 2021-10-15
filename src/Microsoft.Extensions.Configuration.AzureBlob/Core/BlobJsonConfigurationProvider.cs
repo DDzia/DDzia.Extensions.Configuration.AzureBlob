@@ -14,8 +14,9 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
         private BlobJsonConfigurationSource source;
         private Timer timer;
         private ETag etag;
-        private int initialLoad = 0;
-        private int _reloadInProgress = 0;
+        private bool? exists;
+        private int initialLoad;
+        private int _reloadInProgress;
 
         public BlobJsonConfigurationProvider(BlobJsonConfigurationSource source) : base(source)
         {
@@ -33,7 +34,7 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
 
         private void ReloadOnChange()
         {
-            if (this.source.Option.PollingInterval.HasValue)
+            if (this.source.ReloadOnChange)
             {
                 this.timer = new Timer(this.ReloadOnChange, null, this.source.Option.PollingInterval.Value, this.source.Option.PollingInterval.Value);
             }
@@ -62,21 +63,56 @@ namespace Microsoft.Extensions.Configuration.AzureBlob.Core
         {
             using (var ms = new MemoryStream())
             {
-                var (etagNew, updated) = await source.BlobAccessor.RetrieveIfUpdated(ms, this.etag);
-
-                if (!updated)
+                Action notifyChanged = () =>
                 {
-                    return;
+                    if (Interlocked.CompareExchange(ref this.initialLoad, 1, 0) != 0)
+                    {
+                        source.Option.ActionOnReload?.Invoke();
+                        this.source.RemoteFileProvider.ChangeToken.Changed();
+                    }
+                };
+
+                Action loadStream = () =>
+                {
+                    ms.Position = 0;
+                    base.Load(ms);
+                };
+
+                var (etagNew, updated, blobExists) = await source.BlobAccessor.RetrieveIfUpdated(ms, this.etag);
+
+                if (Interlocked.CompareExchange(ref this.initialLoad, 1, 0) == 0)
+                {
+                    this.exists = blobExists;
+                    if (blobExists)
+                    {
+                        this.etag = etagNew;
+                        loadStream();
+                    }
+                    else
+                    {
+                        this.etag = default;
+                    }
                 }
-
-                this.etag = etagNew;
-                ms.Position = 0;
-
-                base.Load(ms);
-
-                if (Interlocked.CompareExchange(ref this.initialLoad, 1, 0) == 1)
+                else if (this.exists != blobExists)
                 {
-                    source.Option.ActionOnReload?.Invoke();
+                    this.exists = blobExists;
+                    if (blobExists)
+                    {
+                        this.etag = etagNew;
+                        loadStream();
+                    }
+                    else
+                    {
+                        this.etag = default;
+                    }
+
+                    notifyChanged();
+                }
+                else if (updated)
+                {
+                    this.etag = etagNew;
+                    loadStream();
+                    notifyChanged();
                 }
             }
         }
