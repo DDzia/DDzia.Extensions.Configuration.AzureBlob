@@ -21,7 +21,7 @@ dotnet add package DDzia.Extensions.Configuration.AzureBlob
 
 Code sample:
 ```csharp
-using Microsoft.Extensions.Configuration.AzureBlob;
+using DDzia.Extensions.Configuration.AzureBlob;
 
 Configuration = new ConfigurationBuilder()
                 .AddBlobJson(

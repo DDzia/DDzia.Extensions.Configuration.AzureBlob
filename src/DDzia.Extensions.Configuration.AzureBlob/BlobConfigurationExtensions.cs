@@ -1,7 +1,8 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration.AzureBlob.Core;
+using DDzia.Extensions.Configuration.AzureBlob.Core;
+using Microsoft.Extensions.Configuration;
 
-namespace Microsoft.Extensions.Configuration.AzureBlob
+namespace DDzia.Extensions.Configuration.AzureBlob
 {
     public static class BlobConfigurationExtensions
     {

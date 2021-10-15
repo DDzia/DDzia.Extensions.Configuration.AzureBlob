@@ -1,9 +1,8 @@
 ﻿using System;
-
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 
-namespace Microsoft.Extensions.Configuration.AzureBlob.Core
+namespace DDzia.Extensions.Configuration.AzureBlob.Core
 {
     public sealed class RemoteFileProvider : IFileProvider
     {
